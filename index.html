@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Generator Poster Jadwal Kajian Pekanan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --app-bg: #14283e;
+    --app-dark: #0c1a29;
+    --app-mid: #1a3350;
+    --gold: #C9A84C;
+    --gold-light: #E9C46A;
+    --border: rgba(201, 168, 76, 0.22);
+    --text-dim: rgba(255, 255, 255, 0.45);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--app-bg);
+    color: #fff;
+    min-height: 100vh;
+  }
+
+  /* ---------- HEADER ---------- */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 28px;
+    background: var(--app-dark);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  }
+  .app-header .logo-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--app-dark);
+    border: 1px solid var(--border);
+  }
+  .app-header .logo-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .app-header .title h1 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .app-header .title p {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px 28px;
+  }
+
+  /* kolom kiri: tambah informasi kajian */
+  .col-left {
+    width: 380px;
+    flex: 0 0 380px;
+    order: 1;
+  }
+
+  /* kolom tengah: preview poster */
+  .col-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 90px;
+    order: 2;
+  }
+
+  /* kolom kanan: branding & judul */
+  .col-right {
+    width: 380px;
+    flex: 0 0 380px;
+    order: 3;
+  }
+
+  /* ---------- FORM ---------- */
+  .card {
+    background: var(--app-mid);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .card > h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    color: var(--gold-light);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .field {
+    margin-bottom: 12px;
+  }
+  .field label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    letter-spacing: 0.2px;
+  }
+  .field input,
+  .field select {
+    width: 100%;
+    padding: 9px 11px;
+    background: var(--app-dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12.5px;
+    outline: none;
+    transition: border-color 0.18s;
+  }
+  .field input:focus,
+  .field select:focus {
+    border-color: var(--gold);
+  }
+  .field select option {
+    background: var(--app-dark);
+  }
+  .row-2 {
+    display: flex;
+    gap: 10px;
+  }
+  .row-2 .field {
+    flex: 1;
+  }
+
+  /* file input */
+  .field input[type="file"] {
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+
+  /* ---------- THEME CHIPS ---------- */
+  .theme-chips {
+    display: flex;
+    gap: 8px;
+  }
+  .chip {
+    flex: 1;
+    padding: 9px 6px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--app-dark);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: border-color 0.18s, transform 0.12s;
+  }
+  .chip:hover { transform: translateY(-1px); }
+  .chip.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold) inset;
+  }
+  .chip .swatch {
+    width: 100%;
+    height: 14px;
+    border-radius: 5px;
+  }
+
+  /* ---------- SLOTS FORM ---------- */
+  .slots-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .count-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(201, 168, 76, 0.15);
+    border: 1px solid var(--border);
+    color: var(--gold-light);
+  }
+  .btn-add {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--app-dark);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.18s, transform 0.12s;
+  }
+  .btn-add:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn-add:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .slot-card {
+    background: var(--app-dark);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .slot-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .slot-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    flex: 0 0 11px;
+  }
+  .slot-head .slot-name {
+    flex: 1;
+    font-size: 12.5px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .slot-head .arrow {
+    font-size: 11px;
+    color: var(--text-dim);
+    transition: transform 0.2s;
+  }
+  .slot-card.open .arrow { transform: rotate(180deg); }
+  .btn-del {
+    border: none;
+    background: rgba(244, 114, 114, 0.14);
+    color: #f47272;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-del:hover { background: rgba(244, 114, 114, 0.28); }
+
+  .slot-body {
+    display: none;
+    padding: 4px 12px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .slot-card.open .slot-body { display: block; }
+
+  /* ---------- DOWNLOAD BTN ---------- */
+  .btn-download {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--app-dark);
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.12s, opacity 0.18s;
+  }
+  .btn-download:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn-download:disabled { opacity: 0.6; cursor: wait; }
+
+  /* =========================================================
+     POSTER CANVAS
+     ========================================================= */
+  .poster {
+    position: relative;
+    width: 560px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .poster.bounce { animation: bounce 0.45s ease; }
+  @keyframes bounce {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  /* THEME: NAVY EMAS */
+  .t-navy {
+    background: linear-gradient(160deg, #1a3354 0%, #0f2138 55%, #0a1929 100%);
+  }
+  .t-navy .p-accent { color: #C9A84C; }
+  .t-navy .p-divider { background: #C9A84C; }
+  .t-navy .p-badge { background: rgba(201, 168, 76, 0.14); border: 1px solid rgba(201, 168, 76, 0.4); }
+  .t-navy .p-footer { background: rgba(8, 18, 30, 0.6); border-top: 1px solid rgba(201, 168, 76, 0.3); }
+  .t-navy .p-slot-line { border-top: 1px solid rgba(201, 168, 76, 0.18); }
+  .t-navy .p-slot-day { color: #E9C46A; }
+  .t-navy .p-slot-card { background: rgba(255, 255, 255, 0.035); border: 1px solid rgba(201, 168, 76, 0.16); }
+
+  /* THEME: TEAL */
+  .t-teal {
+    background: linear-gradient(160deg, #0d3535 0%, #082626 55%, #051818 100%);
+  }
+  .t-teal .p-accent { color: #4dd9c0; }
+  .t-teal .p-divider { background: #4dd9c0; }
+  .t-teal .p-badge { background: rgba(77, 217, 192, 0.14); border: 1px solid rgba(77, 217, 192, 0.4); }
+  .t-teal .p-footer { background: rgba(4, 20, 20, 0.6); border-top: 1px solid rgba(77, 217, 192, 0.3); }
+  .t-teal .p-slot-line { border-top: 1px solid rgba(77, 217, 192, 0.18); }
+  .t-teal .p-slot-day { color: #8fe9db; }
+  .t-teal .p-slot-card { background: rgba(255, 255, 255, 0.035); border: 1px solid rgba(77, 217, 192, 0.16); }
+
+  /* THEME: MAROON */
+  .t-maroon {
+    background: linear-gradient(160deg, #3a1020 0%, #280a16 55%, #18060d 100%);
+  }
+  .t-maroon .p-accent { color: #e8a87c; }
+  .t-maroon .p-divider { background: #e8a87c; }
+  .t-maroon .p-badge { background: rgba(232, 168, 124, 0.14); border: 1px solid rgba(232, 168, 124, 0.4); }
+  .t-maroon .p-footer { background: rgba(20, 5, 11, 0.6); border-top: 1px solid rgba(232, 168, 124, 0.3); }
+  .t-maroon .p-slot-line { border-top: 1px solid rgba(232, 168, 124, 0.18); }
+  .t-maroon .p-slot-day { color: #f2c4a3; }
+  .t-maroon .p-slot-card { background: rgba(255, 255, 255, 0.035); border: 1px solid rgba(232, 168, 124, 0.16); }
+
+  /* ornaments */
+  .p-ornament {
+    position: absolute;
+    z-index: 1;
+    opacity: 0.055;
+    pointer-events: none;
+  }
+  .p-ornament.top-right { top: -30px; right: -30px; }
+  .p-ornament.bottom-left { bottom: -30px; left: -30px; }
+
+  .p-inner {
+    position: relative;
+    z-index: 2;
+    padding: 28px;
+  }
+
+  /* top bar */
+  .p-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .p-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .p-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    flex: 0 0 40px;
+  }
+  .p-logo .p-logo-ph {
+    font-family: 'Scheherazade New', serif;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .p-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .p-brand-text .p-brand-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .p-brand-text .p-brand-sub {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.4px;
+  }
+  .p-badge {
+    font-size: 10px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* bismillah */
+  .p-bismillah {
+    text-align: center;
+    margin: 22px 0 6px;
+  }
+  .p-bismillah .p-arabic {
+    font-family: 'Scheherazade New', serif;
+    font-size: 28px;
+    direction: rtl;
+    line-height: 1.4;
+  }
+  .p-bismillah .p-translit {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.45);
+    font-style: italic;
+    margin-top: 2px;
+    letter-spacing: 0.4px;
+  }
+  .p-divider {
+    width: 50px;
+    height: 2px;
+    margin: 14px auto;
+    border-radius: 2px;
+  }
+
+  /* heading */
+  .p-heading {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .p-eyebrow {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+  .p-title {
+    font-family: 'Amiri', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 5px 0 3px;
+    line-height: 1.25;
+  }
+  .p-subtitle {
+    font-size: 11px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* slot list */
+  .p-slots { display: flex; flex-direction: column; gap: 12px; }
+
+  .p-slot {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* left timeline rail: garis + titik menurun ke bawah */
+  .p-slot-rail {
+    position: relative;
+    flex: 0 0 28px;
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+  }
+  .p-slot-line-v {
+    position: absolute;
+    top: 17px;
+    bottom: 13px;
+    width: 2px;
+    border-radius: 2px;
+    opacity: 0.55;
+  }
+  .p-slot-node {
+    position: relative;
+    z-index: 2;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.18);
+  }
+
+  .p-slot-inner {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 15px 13px 2px;
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+  }
+  /* kiri: tema kajian + pemateri */
+  .p-slot-main {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .p-slot-jenis {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.2px;
+    text-transform: none;
+    font-weight: 700;
+  }
+  .p-slot-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 4px;
+  }
+  .p-slot-judul {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 3px 0 2px;
+    line-height: 1.3;
+  }
+  .p-slot-pemateri {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0;
+  }
+  /* kanan: informasi tanggal, jam, tempat (menurun ke bawah) */
+  .p-slot-meta {
+    flex: 0 0 42%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding-left: 14px;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .p-slot-meta span {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .p-slot-meta .p-ico {
+    flex: 0 0 auto;
+    line-height: 1.35;
+  }
+  .p-slot-meta .p-txt {
+    min-width: 0;
+    white-space: nowrap;
+  }
+  /* nama masjid boleh 2 baris, baris ke-2 sejajar dgn teks (bukan di bawah ikon) */
+  .p-slot-meta .p-slot-place .p-txt {
+    white-space: normal;
+  }
+
+  /* compact mode (>=5 slots): 2 kolom */
+  .p-slots.compact {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  /* jumlah ganjil -> card terakhir di tengah bawah */
+  .p-slots.compact .p-slot:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: calc(50% - 6px);
+    justify-self: center;
+  }
+  .p-slots.compact .p-slot-rail { flex: 0 0 24px; }
+  .p-slots.compact .p-slot-inner { padding: 9px 12px 9px 2px; flex-direction: column; align-items: stretch; gap: 7px; }
+  .p-slots.compact .p-slot-judul { font-size: 13px; margin: 2px 0 1px; }
+  .p-slots.compact .p-slot-pemateri { font-size: 13px; margin-bottom: 0; }
+  .p-slots.compact .p-slot-meta { font-size: 11px; gap: 5px; max-width: none; padding-left: 0; border-left: none; padding-top: 7px; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+  .p-slots.compact .p-slot-jenis { font-size: 11px; }
+  .p-slots.compact .p-slot-label { font-size: 8px; margin-top: 3px; }
+
+  /* footer */
+  .p-footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 28px;
+  }
+  .p-footer .p-foot-left strong {
+    font-size: 12px;
+    font-weight: 600;
+    display: block;
+  }
+  .p-footer .p-foot-left span {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .p-footer .p-foot-right {
+    text-align: right;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  /* Desktop: info kajian kiri, poster tengah, branding kanan */
+  @media (max-width: 1200px) {
+    .layout {
+      flex-direction: column;
+      align-items: center;
+    }
+    .col-left,
+    .col-right {
+      width: 100%;
+      max-width: 480px;
+      flex: none;
+    }
+    .col-center {
+      width: 100%;
+      position: static;
+    }
+    /* mobile order: poster dulu, lalu info kajian, lalu branding */
+    .col-center { order: 1; }
+    .col-left { order: 2; }
+    .col-right { order: 3; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="logo-mark"><img src="logo-ms.png" alt="Muslim Solo" /></div>
+  <div class="title">
+    <h1>Generator Poster Jadwal Kajian</h1>
+    <p>Buat poster jadwal kajian pekanan dengan mudah</p>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- ================= COL RIGHT: BRANDING & JUDUL ================= -->
+  <div class="col-right">
+
+    <!-- GLOBAL BRANDING -->
+    <div class="card">
+      <h2>Branding &amp; judul</h2>
+      <div class="field">
+        <label>Nama Media / Organisasi</label>
+        <input id="f-brand" type="text" value="muslimsolo.id" />
+      </div>
+      <div class="field">
+        <label>Tagline / Sub-nama</label>
+        <input id="f-sub" type="text" value="Media Dakwah Digital" />
+      </div>
+      <div class="field">
+        <label>Judul Poster / Tema Pekan</label>
+        <input id="f-title" type="text" value="Jadwal Kajian Pekan Ini" />
+      </div>
+      <div class="field">
+        <label>Subjudul Poster</label>
+        <input id="f-subtitle" type="text" value="Kota Solo" />
+      </div>
+      <div class="field">
+        <label>Badge Pekan / Periode</label>
+        <input id="f-badge" type="text" value="Pekan #1 · September 2026" />
+      </div>
+      <div class="field">
+        <label>Kontak / Website</label>
+        <input id="f-contact" type="text" value="@muslimsolo.id" />
+      </div>
+      <div class="field">
+        <label>Hashtag (pisahkan dengan spasi)</label>
+        <input id="f-hashtags" type="text" value="#kajiansunnah #muslimsolo" />
+      </div>
+      <div class="field">
+        <label>Upload Logo (PNG/JPG)</label>
+        <input id="f-logo" type="file" accept="image/png, image/jpeg" />
+      </div>
+      <div class="field">
+        <label>Tema Warna</label>
+        <div class="theme-chips" id="theme-chips">
+          <button class="chip active" data-tema="t-navy" onclick="setTema('t-navy', this)">
+            <span class="swatch" style="background:linear-gradient(90deg,#1a3354,#C9A84C)"></span>
+            Navy Emas
+          </button>
+          <button class="chip" data-tema="t-teal" onclick="setTema('t-teal', this)">
+            <span class="swatch" style="background:linear-gradient(90deg,#0d3535,#4dd9c0)"></span>
+            Teal
+          </button>
+          <button class="chip" data-tema="t-maroon" onclick="setTema('t-maroon', this)">
+            <span class="swatch" style="background:linear-gradient(90deg,#3a1020,#e8a87c)"></span>
+            Maroon
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= COL LEFT: TAMBAH INFORMASI KAJIAN ================= -->
+  <div class="col-left">
+
+    <!-- KAJIAN SLOTS -->
+    <div class="card">
+      <div class="slots-toolbar">
+        <span class="count-badge" id="count-badge">2 kajian</span>
+        <button class="btn-add" id="btn-add" onclick="addSlot()">+ Tambah</button>
+      </div>
+      <div id="slots-container"></div>
+    </div>
+
+    <button class="btn-download" id="btn-download" onclick="downloadPoster()">⬇ Unduh Poster PNG</button>
+  </div>
+
+  <!-- ================= COL CENTER: PREVIEW POSTER ================= -->
+  <div class="col-center">
+    <div class="poster t-navy" id="poster">
+
+      <!-- Ornament top-right -->
+      <svg class="p-ornament top-right" width="220" height="220" viewBox="0 0 220 220" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="150" cy="70" r="60"/>
+        <circle cx="150" cy="70" r="42"/>
+        <circle cx="150" cy="70" r="24"/>
+        <polygon points="150,20 168,58 210,58 176,84 190,124 150,100 110,124 124,84 90,58 132,58"/>
+        <line x1="150" y1="0" x2="150" y2="140"/>
+        <line x1="80" y1="70" x2="220" y2="70"/>
+      </svg>
+
+      <!-- Ornament bottom-left -->
+      <svg class="p-ornament bottom-left" width="220" height="220" viewBox="0 0 220 220" fill="none" stroke="currentColor" stroke-width="1.4">
+        <rect x="40" y="120" width="70" height="70" transform="rotate(15 75 155)"/>
+        <rect x="40" y="120" width="70" height="70" transform="rotate(35 75 155)"/>
+        <rect x="40" y="120" width="70" height="70" transform="rotate(55 75 155)"/>
+        <circle cx="75" cy="155" r="52"/>
+        <circle cx="75" cy="155" r="30"/>
+      </svg>
+
+      <div class="p-inner">
+        <!-- top bar -->
+        <div class="p-topbar">
+          <div class="p-brand">
+            <div class="p-logo">
+              <span class="p-logo-ph" id="p-logo-ph" style="display:none">م</span>
+              <img id="p-logo-img" src="logo-ms.png" alt="logo" />
+            </div>
+            <div class="p-brand-text">
+              <div class="p-brand-name" id="p-brand-name">MuslimSolo.id</div>
+              <div class="p-brand-sub" id="p-brand-sub">Media Dakwah Digital</div>
+            </div>
+          </div>
+          <div class="p-badge" id="p-badge">Pekan #1 · September 2026</div>
+        </div>
+
+        <!-- bismillah -->
+        <div class="p-bismillah">
+          <div class="p-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+        </div>
+        <div class="p-divider"></div>
+
+        <!-- heading -->
+        <div class="p-heading">
+          <div class="p-title p-accent" id="p-title">Jadwal Kajian Pekan Ini</div>
+          <div class="p-subtitle" id="p-subtitle">Solo &amp; Karanganyar · September 2026</div>
+        </div>
+
+        <!-- slots -->
+        <div class="p-slots" id="p-slots"></div>
+      </div>
+
+      <!-- footer -->
+      <div class="p-footer">
+        <div class="p-foot-left">
+          <strong id="p-contact">@muslimsolo.id</strong>
+          <span>Media Dakwah Digital · Kota Solo</span>
+        </div>
+        <div class="p-foot-right p-accent" id="p-hashtags"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   STATE
+   ========================================================= */
+const JENIS_OPTIONS = [
+  "Kajian Rutin Mingguan",
+  "Kajian Tafsir Al-Qur'an",
+  "Kajian Hadist & Sunnah",
+  "Kajian Fiqih Muamalah",
+  "Kajian Akidah & Manhaj",
+  "Kajian Sirah Nabawiyah",
+  "Majelis Ilmu",
+  "Tabligh Akbar",
+  "Halaqah Tarbiyah"
+];
+
+const SLOT_COLORS = ['#C9A84C','#4dd9c0','#7eb8f7','#e8a87c','#a78bfa','#f472b6','#86efac'];
+const MONTHS = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+let slotIdCounter = 0;
+let logoDataUrl = null;
+let currentTema = 't-navy';
+
+let slots = [
+  {
+    id: ++slotIdCounter,
+    jenis: "Kajian Rutin Mingguan",
+    judul: "Keutamaan Sholat Tahajjud",
+    pemateri: "Ustadz Ahmad Fauzi, Lc.",
+    hari: "Ahad, 7 Sep 2026",
+    waktu: "Ba'da Maghrib – 18.30",
+    tempat: "Masjid Agung Surakarta",
+    open: true
+  },
+  {
+    id: ++slotIdCounter,
+    jenis: "Kajian Tafsir Al-Qur'an",
+    judul: "Tafsir Surah Al-Mulk",
+    pemateri: "Ustadz Dr. Hasan Basri",
+    hari: "Selasa, 9 Sep 2026",
+    waktu: "Ba'da Isya – 20.00",
+    tempat: "Masjid Al-Falah Karanganyar",
+    open: false
+  }
+];
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function esc(str) {
+  return String(str == null ? "" : str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+function truncate(str, n) {
+  str = String(str || "");
+  return str.length > n ? str.slice(0, n) + "…" : str;
+}
+function colorFor(index) {
+  return SLOT_COLORS[index % SLOT_COLORS.length];
+}
+function getVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : "";
+}
+/* Kapital di awal saja (sentence case) */
+function sentenceCase(str) {
+  str = String(str || "").trim();
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+/* Kapital di setiap awal kata (title case) */
+function titleCase(str) {
+  str = String(str || "").trim().toLowerCase();
+  if (!str) return "";
+  return str.replace(/(^|[\s\-])(\p{L})/gu, (m, sep, ch) => sep + ch.toUpperCase());
+}
+
+/* =========================================================
+   THEME
+   ========================================================= */
+function setTema(tema, btn) {
+  currentTema = tema;
+  const poster = document.getElementById('poster');
+  poster.classList.remove('t-navy', 't-teal', 't-maroon');
+  poster.classList.add(tema);
+  document.querySelectorAll('#theme-chips .chip').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  generatePoster();
+}
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+function handleLogo(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    logoDataUrl = e.target.result;
+    const img = document.getElementById('p-logo-img');
+    const ph = document.getElementById('p-logo-ph');
+    img.src = logoDataUrl;
+    img.style.display = 'block';
+    ph.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+/* =========================================================
+   SLOT MANAGEMENT
+   ========================================================= */
+function addSlot() {
+  if (slots.length >= 7) return;
+  slots.push({
+    id: ++slotIdCounter,
+    jenis: JENIS_OPTIONS[0],
+    judul: "",
+    pemateri: "",
+    hari: "",
+    waktu: "",
+    tempat: "",
+    open: true
+  });
+  renderFormSlots();
+  generatePoster();
+}
+
+function removeSlot(id) {
+  if (slots.length <= 2) return;
+  slots = slots.filter(s => s.id !== id);
+  renderFormSlots();
+  generatePoster();
+}
+
+function toggleSlot(id) {
+  const s = slots.find(s => s.id === id);
+  if (s) s.open = !s.open;
+  renderFormSlots();
+}
+
+function updateSlotField(id, field, value) {
+  const s = slots.find(s => s.id === id);
+  if (!s) return;
+  s[field] = value;
+  // update header title live when judul changes
+  if (field === 'judul') {
+    const nameEl = document.querySelector('.slot-name[data-id="' + id + '"]');
+    if (nameEl) {
+      const idx = slots.findIndex(x => x.id === id);
+      nameEl.textContent = "Kajian " + (idx + 1) + ": " + truncate(value || "Tanpa Judul", 28);
+    }
+  }
+  generatePoster();
+}
+
+function renderFormSlots() {
+  const container = document.getElementById('slots-container');
+  let html = "";
+
+  slots.forEach((s, i) => {
+    const color = colorFor(i);
+    const showDelete = slots.length > 2;
+
+    html += ''
+      + '<div class="slot-card' + (s.open ? ' open' : '') + '">'
+      +   '<div class="slot-head" onclick="toggleSlot(' + s.id + ')">'
+      +     '<span class="slot-dot" style="background:' + color + '"></span>'
+      +     '<span class="slot-name" data-id="' + s.id + '">Kajian ' + (i + 1) + ': ' + esc(truncate(s.judul || "Tanpa Judul", 28)) + '</span>'
+      +     '<span class="arrow">▼</span>'
+      +     (showDelete ? '<button class="btn-del" onclick="event.stopPropagation();removeSlot(' + s.id + ')">✕</button>' : '')
+      +   '</div>'
+      +   '<div class="slot-body">'
+      +     '<div class="field"><label>Jenis Kajian</label><input type="text" value="' + esc(s.jenis) + '" oninput="updateSlotField(' + s.id + ',\'jenis\',this.value)" /></div>'
+      +     '<div class="field"><label>Judul / Tema</label><input type="text" value="' + esc(s.judul) + '" oninput="updateSlotField(' + s.id + ',\'judul\',this.value)" /></div>'
+      +     '<div class="field"><label>Nama Pemateri</label><input type="text" value="' + esc(s.pemateri) + '" oninput="updateSlotField(' + s.id + ',\'pemateri\',this.value)" /></div>'
+      +     '<div class="row-2">'
+      +       '<div class="field"><label>Hari &amp; Tanggal</label><input type="text" value="' + esc(s.hari) + '" oninput="updateSlotField(' + s.id + ',\'hari\',this.value)" /></div>'
+      +       '<div class="field"><label>Waktu</label><input type="text" value="' + esc(s.waktu) + '" oninput="updateSlotField(' + s.id + ',\'waktu\',this.value)" /></div>'
+      +     '</div>'
+      +     '<div class="field"><label>Tempat / Masjid</label><input type="text" value="' + esc(s.tempat) + '" oninput="updateSlotField(' + s.id + ',\'tempat\',this.value)" /></div>'
+      +   '</div>'
+      + '</div>';
+  });
+
+  container.innerHTML = html;
+
+  // count badge
+  document.getElementById('count-badge').textContent = slots.length + " kajian";
+  // add button disabled
+  document.getElementById('btn-add').disabled = slots.length >= 7;
+}
+
+/* =========================================================
+   WEEK BADGE
+   ========================================================= */
+function weekBadge() {
+  const now = new Date();
+  const weekNo = Math.ceil(now.getDate() / 7);
+  return "Pekan #" + weekNo + " · " + MONTHS[now.getMonth()] + " " + now.getFullYear();
+}
+
+/* =========================================================
+   GENERATE POSTER
+   ========================================================= */
+function generatePoster() {
+  // global fields
+  document.getElementById('p-brand-name').textContent = sentenceCase(getVal('f-brand'));
+  document.getElementById('p-brand-sub').textContent = getVal('f-sub');
+  document.getElementById('p-title').textContent = titleCase(getVal('f-title'));
+  document.getElementById('p-subtitle').textContent = getVal('f-subtitle');
+  document.getElementById('p-contact').textContent = getVal('f-contact');
+  document.getElementById('p-badge').textContent = getVal('f-badge');
+
+  // hashtags (max 4, line-break separated)
+  const tags = getVal('f-hashtags').trim().split(/\s+/).filter(Boolean).slice(0, 4);
+  document.getElementById('p-hashtags').innerHTML = tags.map(esc).join("<br>");
+
+  // slots
+  const wrap = document.getElementById('p-slots');
+  wrap.classList.toggle('compact', slots.length >= 5);
+
+  let html = "";
+  slots.forEach((s, i) => {
+    const color = colorFor(i);
+
+    const meta = [];
+    if (s.hari) meta.push('<span class="p-slot-day"><span class="p-ico">📅</span><span class="p-txt">' + esc(s.hari) + '</span></span>');
+    if (s.waktu) meta.push('<span><span class="p-ico">⏰</span><span class="p-txt">' + esc(s.waktu) + '</span></span>');
+    if (s.tempat) meta.push('<span class="p-slot-place"><span class="p-ico">📍</span><span class="p-txt">' + esc(s.tempat) + '</span></span>');
+
+    html += ''
+      + '<div class="p-slot p-slot-card">'
+      +   '<div class="p-slot-rail">'
+      +     '<span class="p-slot-line-v" style="background:' + color + '"></span>'
+      +     '<span class="p-slot-node" style="background:' + color + '"></span>'
+      +   '</div>'
+      +   '<div class="p-slot-inner">'
+      +     '<div class="p-slot-main">'
+      +       '<div class="p-slot-jenis" style="color:' + color + '">' + esc(titleCase(s.jenis)) + '</div>'
+      +       '<div class="p-slot-label">Tema Kajian :</div>'
+      +       '<div class="p-slot-judul">“' + esc(s.judul || "Tanpa Judul") + '”</div>'
+      +       (s.pemateri ? '<div class="p-slot-pemateri">🎤 ' + esc(s.pemateri) + '</div>' : '<div class="p-slot-pemateri"></div>')
+      +     '</div>'
+      +     '<div class="p-slot-meta">' + meta.join("") + '</div>'
+      +   '</div>'
+      + '</div>';
+  });
+  wrap.innerHTML = html;
+
+  // subtle bounce
+  const poster = document.getElementById('poster');
+  poster.classList.remove('bounce');
+  void poster.offsetWidth; // reflow
+  poster.classList.add('bounce');
+}
+
+/* =========================================================
+   DOWNLOAD
+   ========================================================= */
+function downloadPoster() {
+  const btn = document.getElementById('btn-download');
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "⏳ Memproses...";
+
+  const poster = document.getElementById('poster');
+  // remove bounce animation transform during capture
+  poster.classList.remove('bounce');
+
+  html2canvas(poster, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+    const now = new Date();
+    const stamp = now.getFullYear() + "-"
+      + String(now.getMonth() + 1).padStart(2, "0") + "-"
+      + String(now.getDate()).padStart(2, "0");
+    const link = document.createElement('a');
+    link.download = "jadwal-kajian-" + stamp + ".png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }).catch(err => {
+    console.error(err);
+    alert("Gagal membuat gambar poster. Coba lagi.");
+  }).finally(() => {
+    btn.disabled = false;
+    btn.textContent = original;
+  });
+}
+
+/* =========================================================
+   BINDINGS
+   ========================================================= */
+function bindGlobal() {
+  ['f-brand','f-sub','f-title','f-subtitle','f-badge','f-contact','f-hashtags'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', generatePoster);
+  });
+  document.getElementById('f-logo').addEventListener('change', handleLogo);
+}
+
+window.onload = function () {
+  bindGlobal();
+  // isi default badge sesuai pekan & bulan berjalan
+  const badgeEl = document.getElementById('f-badge');
+  if (badgeEl) badgeEl.value = weekBadge();
+  renderFormSlots();
+  generatePoster();
+};
+</script>
+</body>
+</html>
