@@ -75,20 +75,21 @@
   .layout {
     display: flex;
     align-items: flex-start;
-    gap: 24px;
-    padding: 24px 28px;
+    gap: 20px;
+    padding: 20px 24px;
   }
 
   /* kolom kiri: tambah informasi kajian */
   .col-left {
-    width: 380px;
-    flex: 0 0 380px;
+    width: 300px;
+    flex: 0 0 300px;
     order: 1;
   }
 
   /* kolom tengah: preview poster */
   .col-center {
     flex: 1;
+    min-width: 0;
     display: flex;
     justify-content: center;
     position: sticky;
@@ -98,8 +99,8 @@
 
   /* kolom kanan: branding & judul */
   .col-right {
-    width: 380px;
-    flex: 0 0 380px;
+    width: 300px;
+    flex: 0 0 300px;
     order: 3;
   }
 
@@ -636,8 +637,8 @@
   }
 
   /* ---------- RESPONSIVE ---------- */
-  /* Desktop: info kajian kiri, poster tengah, branding kanan */
-  @media (max-width: 1200px) {
+  /* 3 kolom butuh ~1280px; di bawah itu ditumpuk agar branding tidak terpotong */
+  @media (max-width: 1279px) {
     .layout {
       flex-direction: column;
       align-items: center;
