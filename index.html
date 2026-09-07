@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Generator Poster Jadwal Kajian Pekanan</title>
+<link rel="icon" type="image/png" href="logo-ms.png" />
+<link rel="apple-touch-icon" href="logo-ms.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet" />
@@ -550,6 +552,15 @@
     font-weight: 700;
     margin: 3px 0 2px;
     line-height: 1.3;
+    display: flex;
+    align-items: flex-start;
+    gap: 1px;
+  }
+  .p-slot-judul .p-quote {
+    flex: 0 0 auto;
+  }
+  .p-slot-judul .p-txt {
+    min-width: 0;
   }
   .p-slot-pemateri {
     font-family: 'Poppins', sans-serif;
@@ -557,6 +568,17 @@
     font-weight: 600;
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .p-slot-pemateri .p-ico {
+    flex: 0 0 auto;
+    line-height: 1.35;
+  }
+  .p-slot-pemateri .p-txt {
+    min-width: 0;
+    line-height: 1.35;
   }
   /* kanan: informasi tanggal, jam, tempat (menurun ke bawah) */
   .p-slot-meta {
@@ -691,7 +713,7 @@
       </div>
       <div class="field">
         <label>Subjudul Poster</label>
-        <input id="f-subtitle" type="text" value="Kota Solo" />
+        <input id="f-subtitle" type="text" value="Menuntut Ilmu, Meraih Berkah" />
       </div>
       <div class="field">
         <label>Badge Pekan / Periode</label>
@@ -919,6 +941,7 @@ function handleLogo(event) {
     img.src = logoDataUrl;
     img.style.display = 'block';
     ph.style.display = 'none';
+    saveState();
   };
   reader.readAsDataURL(file);
 }
@@ -1017,6 +1040,74 @@ function weekBadge() {
 }
 
 /* =========================================================
+   PERSISTENCE (simpan kajian terakhir)
+   ========================================================= */
+const STORAGE_KEY = 'jadwalKajianState_v1';
+const GLOBAL_FIELDS = ['f-brand','f-sub','f-title','f-subtitle','f-badge','f-contact','f-hashtags'];
+
+function saveState() {
+  try {
+    const fields = {};
+    GLOBAL_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) fields[id] = el.value;
+    });
+    const state = { fields: fields, slots: slots, tema: currentTema, logo: logoDataUrl };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { /* storage penuh / tidak tersedia - abaikan */ }
+}
+
+function loadState() {
+  let state = null;
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch (e) { state = null; }
+
+  const badgeEl = document.getElementById('f-badge');
+
+  if (!state) {
+    // belum ada data tersimpan -> isi default badge pekan berjalan
+    if (badgeEl) badgeEl.value = weekBadge();
+    return;
+  }
+
+  // pulihkan field global
+  if (state.fields) {
+    GLOBAL_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && typeof state.fields[id] === 'string') el.value = state.fields[id];
+    });
+  }
+  if (badgeEl && !(state.fields && typeof state.fields['f-badge'] === 'string')) {
+    badgeEl.value = weekBadge();
+  }
+
+  // pulihkan daftar kajian
+  if (Array.isArray(state.slots) && state.slots.length) {
+    slots = state.slots;
+    slotIdCounter = slots.reduce((max, s) => Math.max(max, s.id || 0), 0);
+  }
+
+  // pulihkan tema warna
+  if (state.tema) {
+    currentTema = state.tema;
+    const poster = document.getElementById('poster');
+    poster.classList.remove('t-navy', 't-teal', 't-maroon');
+    poster.classList.add(currentTema);
+    document.querySelectorAll('#theme-chips .chip').forEach(c => {
+      c.classList.toggle('active', c.getAttribute('data-tema') === currentTema);
+    });
+  }
+
+  // pulihkan logo yang diupload
+  if (state.logo) {
+    logoDataUrl = state.logo;
+    const img = document.getElementById('p-logo-img');
+    const ph = document.getElementById('p-logo-ph');
+    if (img) { img.src = logoDataUrl; img.style.display = 'block'; }
+    if (ph) ph.style.display = 'none';
+  }
+}
+
+/* =========================================================
    GENERATE POSTER
    ========================================================= */
 function generatePoster() {
@@ -1055,8 +1146,8 @@ function generatePoster() {
       +     '<div class="p-slot-main">'
       +       '<div class="p-slot-jenis" style="color:' + color + '">' + esc(titleCase(s.jenis)) + '</div>'
       +       '<div class="p-slot-label">Tema Kajian :</div>'
-      +       '<div class="p-slot-judul">“' + esc(s.judul || "Tanpa Judul") + '”</div>'
-      +       (s.pemateri ? '<div class="p-slot-pemateri">🎤 ' + esc(s.pemateri) + '</div>' : '<div class="p-slot-pemateri"></div>')
+      +       '<div class="p-slot-judul"><span class="p-quote">“</span><span class="p-txt">' + esc(s.judul || "Tanpa Judul") + '”</span></div>'
+      +       (s.pemateri ? '<div class="p-slot-pemateri"><span class="p-ico">🎤</span><span class="p-txt">' + esc(s.pemateri) + '</span></div>' : '<div class="p-slot-pemateri"></div>')
       +     '</div>'
       +     '<div class="p-slot-meta">' + meta.join("") + '</div>'
       +   '</div>'
@@ -1069,6 +1160,9 @@ function generatePoster() {
   poster.classList.remove('bounce');
   void poster.offsetWidth; // reflow
   poster.classList.add('bounce');
+
+  // simpan kondisi terakhir
+  saveState();
 }
 
 /* =========================================================
@@ -1114,10 +1208,8 @@ function bindGlobal() {
 }
 
 window.onload = function () {
+  loadState();      // pulihkan kajian terakhir dari localStorage
   bindGlobal();
-  // isi default badge sesuai pekan & bulan berjalan
-  const badgeEl = document.getElementById('f-badge');
-  if (badgeEl) badgeEl.value = weekBadge();
   renderFormSlots();
   generatePoster();
 };
